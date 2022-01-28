@@ -1,0 +1,27 @@
+{
+  "name": "homebucket",
+  "version": "1.0.0",
+  "description": "An inventory management system (sandbox environment) that you can store information on items that you own.",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "mongoose": "^6.1.8",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDB14/HomeBucket.git"
+  },
+  "author": "Nicole Mitchell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SDB14/HomeBucket/issues"
+  },
+  "homepage": "https://github.com/SDB14/HomeBucket#readme"
+}
