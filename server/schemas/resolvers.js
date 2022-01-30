@@ -1,4 +1,5 @@
-const { User, Book } = require('../models');
+//Needs to be updated
+const { User, Room } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -32,22 +33,22 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        saveBook: async (parent, { book }, context) => {
+        saveRoom: async (parent, { room }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: {savedBooks: book} },
+                    { $addToSet: {savedRooms: room} },
                     { new: true }
                 )
                 return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!')
         },
-        removeBook: async (parent, { bookId }, context) => {
+        removeRoom: async (parent, {roomId }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     {_id: context.user._id},
-                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { $pull: { savedRooms: {roomId:roomId } } },
                     { new: true }
                 )
                 return updatedUser;

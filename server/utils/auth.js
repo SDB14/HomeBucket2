@@ -1,3 +1,5 @@
+//BOILER PLATE, NO CHANGES NEEDED.
+
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
