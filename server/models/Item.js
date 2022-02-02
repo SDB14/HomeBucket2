@@ -1,4 +1,5 @@
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
+const { Item } = require('semantic-ui-react');
 const dateFormat = require('../utils/dateFormat');
 
 const itemSchema = new Schema(
@@ -13,15 +14,15 @@ const itemSchema = new Schema(
         required: true,
         maxlength: 280
       },
-    username: {
-      type: String,
+    price: {
+      type: Number,
       required: true
     },
-    itemId: {
-        type: String,
-        required: true
-      },
-      image: {
+    qty: {
+      type: Number,
+      required: true
+    },
+      image: {//image path stored in vscode
         type: String,
       },
     createdAt: {
@@ -37,4 +38,6 @@ const itemSchema = new Schema(
   }
 );
 
-module.exports = itemSchema;
+const Item = model('Item', itemSchema);
+
+module.exports = Item;

@@ -50,7 +50,7 @@ userSchema.methods.isCorrectPassword = async function(password) {
 };
 
 userSchema.virtual('roomCount').get(function() {
-  return this.friends.length;
+  return this.rooms.length;
 });
 
 const User = model('User', userSchema);

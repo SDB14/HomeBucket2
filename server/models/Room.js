@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const itemSchema = require('./Item');
 const dateFormat = require('../utils/dateFormat');
 
 const roomSchema = new Schema(
@@ -10,10 +9,10 @@ const roomSchema = new Schema(
       minlength: 1,
       maxlength: 280
     },
-    roomId: {
-        type: String,
-        required: true, 
-    },
+    // roomId: {
+    //     type: String,
+    //     required: true, 
+    // },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -23,7 +22,12 @@ const roomSchema = new Schema(
       type: String,
       required: true
     },
-    items: [itemSchema]
+    items:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Item'
+      }
+    ],
   },
   {
     toJSON: {

@@ -8,18 +8,18 @@ const typeDefs = gql`
     rmDesc: String
     itemCount: Int
     createdAt: String
-    savedItems: [Item]
+    items: [Item]
     username: String
   }
   
   type Item {
     _id: ID
-    itemId: String
     itemDesc: String
-    roomId: String
     image: String
     categoryDesc: String
     createdAt: String
+    price: Float
+    qty: Int
   }
 
   type User {
@@ -30,14 +30,24 @@ const typeDefs = gql`
     rooms: [Room]
   }
 
+  type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
-    users: [User]
-    user(username: String!): User
-    rooms(username: String): [Room]
-    room(_id: ID!): Room
+    user: User
+  }
+
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    addRoom(username: String!, roomDesc: String!): Room
+    addItem(rooms: ID!): Item
+    
   }`;
-
-
-
+ // addRoom(roomDesc: String!, username: String, items: [Item]): Room
+   
+ // addItem(roomId: ID!): Item
 // export the typeDefs
 module.exports = typeDefs;
