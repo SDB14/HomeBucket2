@@ -1,43 +1,40 @@
-const { Schema, model } = require('mongoose');
-const { Item } = require('semantic-ui-react');
-const dateFormat = require('../utils/dateFormat');
+const mongoose = require("mongoose");
 
-const itemSchema = new Schema(
+const itemSchema = new mongoose.Schema(
   {
-    itemDesc: {
+    description: {
+      type: String,
+    },
+    image: {
       type: String,
       required: true,
-      maxlength: 280
     },
-    categoryDesc: {
-        type: String,
-        required: true,
-        maxlength: 280
-      },
     price: {
-      type: Number,
-      required: true
+      type: String,
+      required: true,
     },
-    qty: {
-      type: Number,
-      required: true
+    quantity: {
+      type: String,
+      required: true,
     },
-      image: {//image path stored in vscode
-        type: String,
-      },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: timestamp => dateFormat(timestamp)
-    }
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    room: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
   },
-  {
-    toJSON: {
-      getters: true
-    }
-  }
+  { timestamps: true }
 );
 
-const Item = model('Item', itemSchema);
+itemSchema.virtual('id').get(function () {
+  return this._id.toString();
+});
+
+const Item = mongoose.model("Item", itemSchema);
 
 module.exports = Item;

@@ -1,5 +1,6 @@
-const User = require('./User');
-const Room = require('./Room');
-//const Item = require('itemSchema');
-
-module.exports = { User, Room };
+module.exports = {
+  User: require("./User"),
+  Room: require("./Room"),
+  Item: require("./Item"),
+  Category: require("./Category")
+}

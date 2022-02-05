@@ -1,45 +1,32 @@
-const { Schema, model } = require('mongoose');
-const dateFormat = require('../utils/dateFormat');
+const mongoose = require("mongoose");
 
-const roomSchema = new Schema(
+const roomSchema = new mongoose.Schema(
   {
-    rmDesc: {
+    roomName: {
       type: String,
-      required: 'A description is required!',
-      minlength: 1,
-      maxlength: 280
+      required: true,
     },
-    // roomId: {
-    //     type: String,
-    //     required: true, 
-    // },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: timestamp => dateFormat(timestamp)
-    },
-    username: {
+    description: {
       type: String,
-      required: true
+      required: true,
     },
-    items:[
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Item'
-      }
-    ],
-  },
-  {
-    toJSON: {
-      getters: true
+    items: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Item",
+    }],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     }
-  }
+  },
+  { timestamps: true }
 );
 
-roomSchema.virtual('itemCount').get(function() {
-  return this.items.length;
+roomSchema.virtual('id').get(function () {
+  return this._id.toString();
 });
 
-const Room = model('Room', roomSchema);
+const Room = mongoose.model("Room", roomSchema);
 
 module.exports = Room;

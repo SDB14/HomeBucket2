@@ -1,32 +1,60 @@
-const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const path = require('path');
+const express = require("express");
+const dotenv = require("dotenv");
+const { graphqlHTTP } = require("express-graphql");
+const schema = require("./graphql/schema");
+const cors = require("cors");
+const multer = require("multer");
 
-const { typeDefs, resolvers } = require('./schemas');
-const { authMiddleware } = require('./utils/auth');
-const db = require('./config/connection');
+const { connectDB } = require("./db");
 
-const PORT = process.env.PORT || 3001;
 const app = express();
+dotenv.config();
+connectDB();
 
-const startServer = async () => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: authMiddleware,
-  });
-  await server.start();
-  server.applyMiddleware({ app });
-  console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-};
+app.use(express.static("uploads"))
 
-startServer()
+const { authenticate } = require("./middleware/auth");
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(cors());
+app.use(authenticate);
 
-db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
-  });
+app.get("/", (req, res) => {
+  res.json({ msg: "Welcome! Go to /graphql" });
+});
+
+app.use(
+  "/graphql",
+  graphqlHTTP((req) => ({
+    schema,
+    graphiql: true,
+    context: req
+  }))
+);
+
+const storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    callBack(null, "uploads");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  }
+});
+
+let upload = multer({ storage });
+
+app.post("/upload", upload.single("file"), async function (req, res, next) {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("No File");
+    error.httpStatusCode = 400;
+    return res.send(error);
+  }
+  res.send(file);
+});
+
+// const seed = require("./db/SeedCategory")
+// const seedCategories = async () => await seed()
+
+app.listen(process.env.PORT, () => {
+  console.log(`App running on PORT ${process.env.PORT}`);
 });
